@@ -1,0 +1,81 @@
+<html>
+<body>
+
+    <style>
+        pre {
+            border: 1px solid #ccc;
+            padding: 4px;
+            color: #339;
+        }
+        .execute {
+            color: orange;
+        }
+        img {
+            max-width: 150px;
+        }
+    </style>
+
+<p class="esplanation">
+    A simple script ...
+</p>
+
+<pre>
+function addImage(url, element) {
+    const request = new XMLHttpRequest()
+    request.open('GET', url)
+    request.responseType = 'blob'
+
+    request.addEventListener('load', function() {
+        if (request.status == 200) {
+            const blob = new Blob([request.response], {type: 'image/png'})
+            let url = URL.createObjectURL(blob)
+            console.log('image url: %o', url)
+            let img = document.createElement('img')
+            img.src = url
+            element.appendChild(img)
+        }
+        else {
+            console.log(`Response: ${request.status}: ${request.statusText}`)
+        }
+    })
+
+    request.addEventListener('error', function() {
+        console.log('error')
+    })
+
+
+    request.send()
+}
+
+addImage('http://10.10.10.10/images/Hanafuda_1.png', document.querySelector('#element'))
+</pre>
+
+
+<div id="element"></div>
+
+</body>
+</html>
+
+<script>
+    function ready(fn) {
+        if (document.readyState !== 'loading') {
+            fn();
+        } else {
+            document.addEventListener('DOMContentLoaded', fn);
+        }
+    }
+
+    ready(function() {
+        document.querySelectorAll('pre').forEach(function(item) {
+            let newContent = '<a class="execute" href="#">Execute</a>';
+            item.insertAdjacentHTML('afterend', newContent);
+        });
+
+        document.querySelectorAll('a.execute').forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                let code = event.target.previousElementSibling.getInnerHTML()
+                eval(code)
+            })
+        });
+    })
+</script>
