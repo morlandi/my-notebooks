@@ -1,5 +1,6 @@
 # Use python 3.10
-jupyter==1.0.0
-pandas==2.0.3
+jupyter
+pandas
+scipy
 ipdb
 PdbSublimeTextSupport
